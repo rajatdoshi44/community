@@ -5,6 +5,7 @@ from google.genai import types
 
 def getGenAIClient():
     api_key = os.getenv("GOOGLE_API_KEY")
+    print(f"Using Google API Key: {api_key}")
     return genai.Client(api_key=api_key)
 
 

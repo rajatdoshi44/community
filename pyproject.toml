@@ -12,6 +12,11 @@ dependencies = [
     "uvicorn>=0.52.4",
 ]
 
+[dependency-groups]
+dev = [
+    "ipykernel>=6.29.5",
+]
+
 [tool.uv.workspace]
 members = ["apps/*", "packages/*"]
 
@@ -25,4 +30,3 @@ line-length = 100
 [tool.ruff.lint]
 select = ["E", "F"]
 ignore = ["E501"]
-
