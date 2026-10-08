@@ -9,14 +9,11 @@ def getGenAIClient():
     return genai.Client(api_key=api_key)
 
 
-def llm_model(prompt, model="gemini-3.5-flash-lite", temperature=0.0, tools=[]):
+def llm_model(prompt, model="gemini-3.5-flash-lite", temperature=0.0, config={}):
     client = getGenAIClient()
     response = client.models.generate_content(
         model=model,
         contents=prompt,
-        config=types.GenerateContentConfig(
-            tools=tools,
-            temperature=temperature,
-        ),
+        config=types.GenerateContentConfig(**config),
     )
     return response

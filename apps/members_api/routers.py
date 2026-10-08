@@ -45,7 +45,9 @@ async def read_member(id: int, db: Session = Depends(get_db)):
     return fetch_member_by_id_model(db, id)
 
 
-@router.post("/llm/create", response_model=TYPE_SUCCESS_RESPONSE[dict] | TYPE_ERROR_RESPONSE[str])
+@router.post(
+    "/llm/create", response_model=TYPE_SUCCESS_RESPONSE[MemberType] | TYPE_ERROR_RESPONSE[str]
+)
 async def llm_create(prompt: str, db: Session = Depends(get_db)):
     return llm_create_model(prompt, db)
 

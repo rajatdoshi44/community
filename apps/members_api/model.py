@@ -1,9 +1,10 @@
-from my_database.model.member import Members
 from shared_core.utility.api_response import (
     SUCCESS_RESPONSE,
     ERROR_RESPONSE,
 )
+from my_database.model.member import Members
 from shared_core.llm.main import llm_model
+from apps.members_api.type import MemberType
 
 
 def fetch_members_list(db):
@@ -21,6 +22,7 @@ def create_member_model(db, member_data):
         db.add(new_member)
         db.commit()
         db.refresh(new_member)
+        print(f"New member created: {new_member}")
         return SUCCESS_RESPONSE(new_member, "Member created successfully", 201)
     except Exception as e:
         return ERROR_RESPONSE(str(e), "Error creating member", 500)
@@ -54,12 +56,20 @@ def fetch_member_by_id_model(db, member_id):
         return ERROR_RESPONSE(str(e), "Error fetching member", 500)
 
 
-def llm_create_model(prompt: str, db):
+def llm_create_model(user_prompt: str, db):
     try:
-        response = llm_model(prompt)
-        text = response.text
-        print(f"LLM response: {response.text}")
-        return SUCCESS_RESPONSE({"status": text}, "LLM created successfully", 201)
+        prompt = f"Extract the member details carefully from this text and when you return schema, please do not add member_id: {user_prompt}"
+        response = llm_model(
+            prompt,
+            model="gemini-3.5-flash-lite",
+            temperature=0.0,
+            config={
+                "response_mime_type": "application/json",
+                "response_schema": MemberType,
+                "temperature": 0.0,
+            },
+        )
+        return create_member_model(db, response.parsed)
     except Exception as e:
         print(f"Error creating LLM: {e}")
         return ERROR_RESPONSE(str(e), "Error creating LLM", 500)
