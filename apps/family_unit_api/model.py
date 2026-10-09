@@ -1,4 +1,6 @@
+from apps.family_unit_api.type import FamilyUnitType
 from my_database.model.family_units import FamilyUnits
+from shared_core.llm.main import llm_model
 from shared_core.utility.api_response import (
     SUCCESS_RESPONSE,
     ERROR_RESPONSE,
@@ -57,3 +59,22 @@ def fetch_family_unit_by_id_model(db, family_unit_id):
     except Exception as e:
         print(f"Error fetching family unit: {e}")
         return ERROR_RESPONSE(str(e), "Error fetching family unit", 500)
+
+
+def llm_create_family_unit_model(user_prompt: str, db):
+    try:
+        prompt = f"Extract the family details carefully from this text and when you return schema, please do not add family_unit_id: {user_prompt}"
+        generated_family_unit_data = llm_model(
+            prompt,
+            model="gemini-3.5-flash-lite",
+            temperature=0.0,
+            config={
+                "response_mime_type": "application/json",
+                "response_schema": FamilyUnitType,
+                "temperature": 0.0,
+            },
+        )
+        return create_family_unit_model(db, generated_family_unit_data.parsed)
+    except Exception as e:
+        print(f"Error creating family unit via LLM: {e}")
+        return ERROR_RESPONSE(str(e), "Error creating family unit via LLM", 500)
