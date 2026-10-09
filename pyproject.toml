@@ -7,7 +7,9 @@ requires-python = ">=3.14"
 dependencies = [
     "fastapi>=0.141.1",
     "google-genai>=2.27.0",
+    "my-database",
     "pydantic>=2.13.4",
+    "shared-core",
     "sqlalchemy>=2.0.52",
     "uvicorn>=0.52.4",
 ]
@@ -19,6 +21,10 @@ dev = [
 
 [tool.uv.workspace]
 members = ["apps/*", "packages/*"]
+
+[tool.uv.sources]
+my-database = { workspace = true }
+shared-core = { workspace = true }
 
 [tool.poe.tasks]
 start = "uv run uvicorn apps.family_api.main:app --reload --port 8001"
