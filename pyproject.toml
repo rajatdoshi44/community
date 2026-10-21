@@ -7,6 +7,7 @@ requires-python = ">=3.14"
 dependencies = [
     "fastapi>=0.141.1",
     "google-genai>=2.27.0",
+    "httpx>=0.28.1",
     "my-database",
     "pydantic>=2.13.4",
     "shared-core",
@@ -20,7 +21,11 @@ dev = [
 ]
 
 [tool.uv.workspace]
-members = ["apps/*", "packages/*"]
+members = [
+    "apps/*",
+    "packages/*",
+    "tools",
+]
 
 [tool.uv.sources]
 my-database = { workspace = true }

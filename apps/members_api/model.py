@@ -56,6 +56,17 @@ def fetch_member_by_id_model(db, member_id):
         return ERROR_RESPONSE(str(e), "Error fetching member", 500)
 
 
+def fetch_member_by_mobile_number_model(db, mobile_number):
+    try:
+        member = db.query(Members).filter(Members.mobile_number == mobile_number).first()
+        if not member:
+            return ERROR_RESPONSE("Member not found", "Error fetching member", 404)
+        return SUCCESS_RESPONSE(member, "Member fetched successfully", 200)
+    except Exception as e:
+        print(f"Error fetching member: {e}")
+        return ERROR_RESPONSE(str(e), "Error fetching member", 500)
+
+
 def llm_create_model(user_prompt: str, db):
     try:
         prompt = f"Extract the member details carefully from this text and when you return schema, please do not add member_id: {user_prompt}"

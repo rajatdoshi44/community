@@ -9,6 +9,7 @@ from apps.members_api.model import (
     fetch_members_list,
     update_member_model,
     llm_create_model,
+    fetch_member_by_mobile_number_model,
 )
 from apps.members_api.type import MemberType
 from shared_core.utility.api_response import (
@@ -43,6 +44,13 @@ def update_member(member: MemberType, db: Session = Depends(get_db)):
 @router.get("/:id", response_model=TYPE_SUCCESS_RESPONSE[MemberType] | TYPE_ERROR_RESPONSE[str])
 async def read_member(id: int, db: Session = Depends(get_db)):
     return fetch_member_by_id_model(db, id)
+
+
+@router.get(
+    "/:mobileNumber", response_model=TYPE_SUCCESS_RESPONSE[MemberType] | TYPE_ERROR_RESPONSE[str]
+)
+async def fetch_member_by_mobile_number(mobileNumber: int, db: Session = Depends(get_db)):
+    return fetch_member_by_mobile_number_model(db, mobileNumber)
 
 
 @router.post(
