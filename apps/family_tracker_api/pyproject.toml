@@ -1,0 +1,11 @@
+[project]
+name = "family-tracker-api"
+version = "0.1.0"
+description = "CRUD API for family tracker records"
+readme = "README.md"
+requires-python = ">=3.14"
+dependencies = ["my-database", "shared-core"]
+
+[tool.uv.sources]
+my-database = { workspace = true }
+shared-core = { workspace = true }

@@ -6,8 +6,13 @@ from apps.parent_child_api.model import (
     fetch_parent_child_by_id_model,
     fetch_parent_children_list,
     update_parent_child_model,
+    get_member_family_tree_model,
 )
-from apps.parent_child_api.type import ParentChildType
+from apps.parent_child_api.type import (
+    ParentChildType,
+    GetFamilyMemberTreeRequestType,
+    GetFamilyMemberTreeResponseType,
+)
 from shared_core.utility.api_response import (
     TYPE_SUCCESS_RESPONSE,
     TYPE_ERROR_RESPONSE,
@@ -50,6 +55,11 @@ def update_parent_child(parent_child: ParentChildType, db: Session = Depends(get
 )
 async def read_parent_child(id: int, db: Session = Depends(get_db)):
     return fetch_parent_child_by_id_model(db, id)
+
+
+@router.post("/get-member-family-tree", response_model=GetFamilyMemberTreeResponseType)
+def get_member_family_tree(member: GetFamilyMemberTreeRequestType, db: Session = Depends(get_db)):
+    return get_member_family_tree_model(member, db)
 
 
 @router.get("/health")

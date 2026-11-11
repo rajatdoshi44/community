@@ -7,10 +7,17 @@ app = FastAPI(title="Community API Gateway")
 SERVICES = {
     "members": "http://localhost:8005",
     "family-units": "http://localhost:8002",
+    "family-tracker": "http://localhost:8007",
+    "parent-child": "http://localhost:8003",
 }
 
 # Global async client taaki connections reuse ho sakein
 client = httpx.AsyncClient()
+
+
+@app.get("/")
+async def health_check():
+    return {"status": "Community API Gateway is healthy"}
 
 
 @app.api_route("/{service_name}/{path:path}", methods=["GET", "POST", "PUT", "DELETE", "PATCH"])

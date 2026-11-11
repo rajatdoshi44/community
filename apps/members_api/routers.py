@@ -1,4 +1,5 @@
-from fastapi import APIRouter, Depends
+from click import prompt
+from fastapi import APIRouter, Depends, File, UploadFile
 from my_database import db
 from my_database.db import get_db
 from my_database.model import member
@@ -7,9 +8,12 @@ from apps.members_api.model import (
     create_member_model,
     fetch_member_by_id_model,
     fetch_members_list,
+    llm_search_members_model,
     update_member_model,
     llm_create_model,
     fetch_member_by_mobile_number_model,
+    fetch_member_by_member_name_model,
+    llm_create_member_model,
 )
 from apps.members_api.type import MemberType
 from shared_core.utility.api_response import (
@@ -58,6 +62,30 @@ async def fetch_member_by_mobile_number(mobileNumber: int, db: Session = Depends
 )
 async def llm_create(prompt: str, db: Session = Depends(get_db)):
     return llm_create_model(prompt, db)
+
+
+@router.post(
+    "/member-search",
+    response_model=TYPE_SUCCESS_RESPONSE[list[MemberType]] | TYPE_ERROR_RESPONSE[str],
+)
+async def fetch_member_by_member_name(member: MemberType, db: Session = Depends(get_db)):
+    return fetch_member_by_member_name_model(db=db, member=member)
+
+
+@router.post(
+    "/llm/member-search",
+    response_model=TYPE_SUCCESS_RESPONSE[list[MemberType]] | TYPE_ERROR_RESPONSE[str],
+)
+async def llm_search_members(prompt: str, db: Session = Depends(get_db)):
+    return llm_search_members_model(prompt, db)
+
+
+@router.post(
+    "/llm/create-member",
+    response_model=TYPE_SUCCESS_RESPONSE[list[MemberType]] | TYPE_ERROR_RESPONSE[str],
+)
+async def llm_create_member(image: UploadFile = File(...), db: Session = Depends(get_db)):
+    return await llm_create_member_model(image, db)
 
 
 @router.get("/health")

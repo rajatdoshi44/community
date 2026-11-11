@@ -9,6 +9,7 @@ dependencies = [
     "google-genai>=2.27.0",
     "httpx>=0.28.1",
     "my-database",
+    "pillow>=13.0.0",
     "pydantic>=2.13.4",
     "shared-core",
     "sqlalchemy>=2.0.52",

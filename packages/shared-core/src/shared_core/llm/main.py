@@ -17,3 +17,13 @@ def llm_model(prompt, model="gemini-3.5-flash-lite", temperature=0.0, config={})
         config=types.GenerateContentConfig(**config),
     )
     return response
+
+
+def llm_video_model(prompt, model="gemini-3.5-flash-lite", temperature=0.0, config={}):
+    client = getGenAIClient()
+    response = client.models.generate_videos(
+        model=model,
+        contents=prompt,
+        config=types.GenerateContentConfig(**config),
+    )
+    return response

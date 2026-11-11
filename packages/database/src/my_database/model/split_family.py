@@ -9,6 +9,14 @@ class SplitFamily(Base):
     __tablename__ = "split_family"
 
     id = Column("split_family_id", Integer, primary_key=True, index=True)
+    parent_family_id = Column(
+        "parent_family_id",
+        Integer,
+        ForeignKey(
+            "FAMILY_UNITS.family_unit_id",
+        ),
+        nullable=False,
+    )
     family_id = Column(
         "family_unit_id", Integer, ForeignKey("FAMILY_UNITS.family_unit_id"), nullable=False
     )
